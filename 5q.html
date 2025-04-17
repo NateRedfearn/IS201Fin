@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>4 Questions - Smart Version</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f6f8;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .game-container {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      max-width: 600px;
+      margin: auto;
+    }
+
+    h1 {
+      margin-bottom: 1rem;
+    }
+
+    #question {
+      font-size: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    button {
+      margin: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #restart {
+      background-color: #28a745;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <h1>4 Questions (Logic Tree)</h1>
+    <div id="question">Think of something and click Start!</div>
+    <div id="buttons">
+      <button onclick="startGame()">Start</button>
+    </div>
+  </div>
+
+  <script>
+    const tree = {
+      question: "Is it alive?",
+      yes: {
+        question: "Is it human?",
+        yes: {
+          question: "Is the person real?",
+          yes: {
+            question: "Are they alive today?",
+            yes: { guess: "Dwayne 'The Rock' Johnson" },
+            no: { guess: "Albert Einstein" }
+          },
+          no: {
+            question: "Are they a superhero?",
+            yes: { guess: "Spider-Man" },
+            no: { guess: "Harry Potter" }
+          }
+        },
+        no: {
+          question: "Is it a pet?",
+          yes: {
+            question: "Does it bark?",
+            yes: { guess: "a dog" },
+            no: { guess: "a cat" }
+          },
+          no: {
+            question: "Does it live in the wild?",
+            yes: {
+              question: "Is it large?",
+              yes: { guess: "an elephant" },
+              no: { guess: "a fox" }
+            },
+            no: { guess: "a farm animal like a cow" }
+          }
+        }
+      },
+      no: {
+        question: "Is it man-made?",
+        yes: {
+          question: "Is it used for transportation?",
+          yes: {
+            question: "Can it fly?",
+            yes: { guess: "an airplane" },
+            no: { guess: "a car" }
+          },
+          no: {
+            question: "Is it electronic?",
+            yes: {
+              question: "Is it used for communication?",
+              yes: { guess: "a smartphone" },
+              no: { guess: "a microwave" }
+            },
+            no: {
+              question: "Can you sit on it?",
+              yes: { guess: "a chair" },
+              no: { guess: "a hammer" }
+            }
+          }
+        },
+        no: {
+          question: "Is it found in nature?",
+          yes: {
+            question: "Is it a plant?",
+            yes: { guess: "a tree" },
+            no: {
+              question: "Is it weather-related?",
+              yes: { guess: "a tornado" },
+              no: { guess: "a rock" }
+            }
+          },
+          no: {
+            question: "Can you eat it?",
+            yes: {
+              question: "Is it sweet?",
+              yes: { guess: "a cookie" },
+              no: { guess: "a slice of pizza" }
+            },
+            no: { guess: "an abstract concept like 'love'" }
+          }
+        }
+      }
+    };
+
+    let currentNode = null;
+
+    function startGame() {
+      currentNode = tree;
+      showQuestion(currentNode);
+      document.getElementById("buttons").innerHTML = `
+        <button onclick="next('yes')">Yes</button>
+        <button onclick="next('no')">No</button>
+        <button id="restart" onclick="startGame()">Restart</button>
+      `;
+    }
+
+    function showQuestion(node) {
+      if (node.question) {
+        document.getElementById("question").innerText = node.question;
+      } else if (node.guess) {
+        document.getElementById("question").innerText =
+          "Are you thinking of " + node.guess + "? 🤔";
+        document.getElementById("buttons").innerHTML = `
+          <button onclick="startGame()">Play Again</button>
+        `;
+      }
+    }
+
+    function next(answer) {
+      currentNode = currentNode[answer];
+      showQuestion(currentNode);
+    }
+  </script>
+  <div style="text-align: center; margin-top: 3rem;">
+    <a href="index.html" style="font-size: 1.1rem; text-decoration: none; color: #007bff;">
+      🏠 Return to Home Page
+    </a>
+  </div>
+  
+</body>
+</html>
